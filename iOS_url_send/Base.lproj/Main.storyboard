@@ -437,6 +437,7 @@
                         <outlet property="tbStatus" destination="Xao-rk-inw" id="Nvx-Dn-8si"/>
                         <outlet property="tbSuppliedUrl" destination="BXp-1j-4HB" id="OuR-xg-TaP"/>
                         <outlet property="tbUserName" destination="ruq-78-eUG" id="9HY-RW-SA5"/>
+                        <outlet property="tbv_log" destination="ZA5-mu-jxd" id="zSb-gb-5kS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

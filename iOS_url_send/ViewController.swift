@@ -11,6 +11,8 @@ import CocoaAsyncSocket
 
 class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
 
+    let log_datasource_delegate = CallLogDataView()
+    
     // define CallerID.com regex strings used for parsing CallerID.com hardware formats
     let callRecordPattern = "(\\d\\d) ([IO]) ([ES]) (\\d{4}) ([GB]) (.)(\\d) (\\d\\d/\\d\\d \\d\\d:\\d\\d [AP]M) (.{8,15})(.*)"
     let detailedPattern = "(\\d\\d) ([NFR]) {13}(\\d\\d/\\d\\d \\d\\d:\\d\\d:\\d\\d)"
@@ -63,6 +65,8 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     @IBOutlet weak var chooser_deluxe_or_basic: UISegmentedControl!
     @IBOutlet weak var chooser_auth_or_no_auth: UISegmentedControl!
     
+    @IBOutlet weak var tbv_log: UITableView!
+    
     @IBOutlet weak var btnTest: UIButton!
     
     override func viewDidLoad() {
@@ -74,6 +78,10 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
         
         // Start UDP receiver
         startServer()
+        
+        // Link log data
+        tbv_log.dataSource = log_datasource_delegate
+        tbv_log.delegate = log_datasource_delegate
         
         // Load up previous values
         let defaults = UserDefaults.standard
@@ -181,7 +189,15 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     
     func addToLog(text:String){
         
-        // TODO add to log
+        if(log_datasource_delegate.addToLog(data: text)){
+            
+            let log_data_count = log_datasource_delegate.getLogDataCount()
+            
+            tbv_log.beginUpdates()
+            tbv_log.insertRows(at: [IndexPath(row: log_data_count-1, section: 0)], with: .automatic)
+            tbv_log.endUpdates()
+            
+        }
         
     }
     
@@ -229,7 +245,9 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     
     func showPopup(title:String, message:String){
         
-        // TODO - popups
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
         
     }
     

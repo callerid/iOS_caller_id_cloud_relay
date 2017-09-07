@@ -14,6 +14,7 @@
 		041828611F60324A00936477 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0418285F1F60324A00936477 /* LaunchScreen.storyboard */; };
 		0418286C1F60324A00936477 /* iOS_url_sendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0418286B1F60324A00936477 /* iOS_url_sendTests.swift */; };
 		041828771F60324A00936477 /* iOS_url_sendUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041828761F60324A00936477 /* iOS_url_sendUITests.swift */; };
+		0426B2AF1F61A17100CAFA17 /* CallLogDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0426B2AE1F61A17100CAFA17 /* CallLogDataView.swift */; };
 		043750341F6033B500351569 /* FMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0437502A1F6033B500351569 /* FMDatabase.m */; };
 		043750351F6033B500351569 /* FMDatabaseAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0437502C1F6033B500351569 /* FMDatabaseAdditions.m */; };
 		043750361F6033B500351569 /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 0437502E1F6033B500351569 /* FMDatabasePool.m */; };
@@ -57,6 +58,7 @@
 		041828721F60324A00936477 /* iOS_url_sendUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOS_url_sendUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		041828761F60324A00936477 /* iOS_url_sendUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS_url_sendUITests.swift; sourceTree = "<group>"; };
 		041828781F60324A00936477 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0426B2AE1F61A17100CAFA17 /* CallLogDataView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallLogDataView.swift; sourceTree = "<group>"; };
 		043750281F6033B500351569 /* iOS_url_send-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iOS_url_send-Bridging-Header.h"; sourceTree = "<group>"; };
 		043750291F6033B500351569 /* FMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDatabase.h; path = Pods/FMDB/src/fmdb/FMDatabase.h; sourceTree = SOURCE_ROOT; };
 		0437502A1F6033B500351569 /* FMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = Pods/FMDB/src/fmdb/FMDatabase.m; sourceTree = SOURCE_ROOT; };
@@ -140,6 +142,7 @@
 				0418285F1F60324A00936477 /* LaunchScreen.storyboard */,
 				041828621F60324A00936477 /* Info.plist */,
 				043750391F60341700351569 /* DBManager.swift */,
+				0426B2AE1F61A17100CAFA17 /* CallLogDataView.swift */,
 			);
 			path = iOS_url_send;
 			sourceTree = "<group>";
@@ -393,6 +396,7 @@
 				043750341F6033B500351569 /* FMDatabase.m in Sources */,
 				041828591F60324A00936477 /* ViewController.swift in Sources */,
 				043750381F6033B500351569 /* FMResultSet.m in Sources */,
+				0426B2AF1F61A17100CAFA17 /* CallLogDataView.swift in Sources */,
 				0437503A1F60341700351569 /* DBManager.swift in Sources */,
 				043750361F6033B500351569 /* FMDatabasePool.m in Sources */,
 				041828571F60324A00936477 /* AppDelegate.swift in Sources */,
