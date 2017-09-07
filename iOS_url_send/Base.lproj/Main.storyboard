@@ -86,7 +86,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="http://www.generatedUrl.com/upload.php?line=%Line&amp;io=%IO&amp;time=%Time&amp;phone=%Phone&amp;name=%Name" lineBreakMode="characterWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jt7-hx-Y5y">
-                                <rect key="frame" x="108" y="168" width="640" height="33"/>
+                                <rect key="frame" x="108" y="160" width="589" height="41"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                 <color key="textColor" red="0.31764706970000001" green="0.074509806930000005" blue="0.027450980619999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -414,6 +414,16 @@
                                     <outletCollection property="gestureRecognizers" destination="4zt-Dp-TDm" appends="YES" id="H25-O1-Llx"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Kd-jo-viQ">
+                                <rect key="frame" x="671" y="242" width="89" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <gestureRecognizers/>
+                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                <state key="normal" title="Copy Gen. URL"/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="hcU-8h-LLZ" appends="YES" id="5al-Ms-Gx0"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
@@ -454,6 +464,11 @@
                 <tapGestureRecognizer id="qFN-sO-XAZ" userLabel="btnTest">
                     <connections>
                         <action selector="btnTest_Click:" destination="BYZ-38-t0r" id="e2o-cc-q63"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="hcU-8h-LLZ" userLabel="btnCopyGenUrl">
+                    <connections>
+                        <action selector="btnCopyGenUrl_Click:" destination="BYZ-38-t0r" id="UBl-f5-VOP"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>

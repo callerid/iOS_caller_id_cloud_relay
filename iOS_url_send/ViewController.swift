@@ -190,7 +190,8 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     func addToLog(text:String){
         
         // Filter out small echos from unit
-        if(text.characters.count<10){
+        let temp = text.replacingOccurrences(of: " ", with: "")
+        if(temp.characters.count<10){
             return
         }
         
@@ -203,6 +204,12 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             tbv_log.endUpdates()
             
         }
+        
+    }
+    
+    @IBAction func btnCopyGenUrl_Click(_ sender: Any) {
+        
+        UIPasteboard.general.string = lbGeneratedUrl.text
         
     }
     
