@@ -189,6 +189,11 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     
     func addToLog(text:String){
         
+        // Filter out small echos from unit
+        if(text.characters.count<10){
+            return
+        }
+        
         if(log_datasource_delegate.addToLog(data: text)){
             
             let log_data_count = log_datasource_delegate.getLogDataCount()
@@ -275,10 +280,14 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             
             post_url(urlPost: tbSuppliedUrl.text!, line: "01", time: "01/01 12:00 PM", phone: "770-263-7111", name: "CallerID.com", io: "I", se: "S", status: "x", duration: "0030", ringNumber: "03", ringType: "A")
             
+            showPopup(title: "Example Call Sent", message: "Call was sent to supplied URL.")
+            
         }
         else{
             
             post_url(urlPost: lbGeneratedUrl.text!, line: "01", time: "01/01 12:00 PM", phone: "770-263-7111", name: "CallerID.com", io: "I", se: "S", status: "x", duration: "0030", ringNumber: "03", ringType: "A")
+            
+            showPopup(title: "Example Call Sent", message: "Call was sent to custom URL.")
             
         }
         
