@@ -210,6 +210,9 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             tbv_log.beginUpdates()
             tbv_log.insertRows(at: [IndexPath(row: log_data_count-1, section: 0)], with: .automatic)
             tbv_log.endUpdates()
+         
+            let indexPath = NSIndexPath(item: log_datasource_delegate.getLogDataCount()-1, section: 0)
+            tbv_log.scrollToRow(at: indexPath as IndexPath, at: UITableViewScrollPosition.middle, animated: true)
             
         }
         
@@ -722,8 +725,6 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
                 
                 
                 let textToLog = (udpRecieved as String).getCompleteMatch(regex: callRecordPattern)
-                
-                
                 if(lineNumber != "n/a"){
                     
                     addToLog(text: textToLog as String)
@@ -758,9 +759,10 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
                     
                 }
                 
+                let textToLog = (udpRecieved as String).getCompleteMatch(regex: detailedPattern)
                 if(lineNumber != "n/a"){
                  
-                    addToLog(text: udpRecieved as String)
+                    addToLog(text: textToLog as String)
                     
                 }
                 

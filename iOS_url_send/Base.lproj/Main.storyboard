@@ -431,7 +431,7 @@
                         <outlet property="btnTest" destination="hmd-c6-RtH" id="5rB-8V-WhC"/>
                         <outlet property="chooser_auth_or_no_auth" destination="1YQ-xZ-QCa" id="Vkf-ki-Yax"/>
                         <outlet property="chooser_deluxe_or_basic" destination="FWd-kg-lYg" id="xRA-x8-6aM"/>
-                        <outlet property="chooser_supplied_or_custom" destination="VJx-3e-Ktl" id="MLQ-fL-576"/>
+                        <outlet property="chooser_supplied_or_built" destination="VJx-3e-Ktl" id="U5A-b2-O9t"/>
                         <outlet property="lbGeneratedUrl" destination="jt7-hx-Y5y" id="jKi-1I-8xh"/>
                         <outlet property="tbDateTime" destination="HMJ-Br-EwA" id="h07-dO-sw5"/>
                         <outlet property="tbDuration" destination="lNk-R7-rzS" id="1sO-cZ-YIz"/>
