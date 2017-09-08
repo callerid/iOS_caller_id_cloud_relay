@@ -10,7 +10,7 @@ import UIKit
 import CocoaAsyncSocket
 
 class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
-
+    
     let log_datasource_delegate = CallLogDataView()
     
     // define CallerID.com regex strings used for parsing CallerID.com hardware formats
@@ -98,10 +98,12 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
         let usingSupplied = defaults.bool(forKey: sDataUsingSuppliedUrl)
         if(usingSupplied){
             chooser_supplied_or_built.selectedSegmentIndex = 0
+            btnTest.setTitle("Test Supplied URL", for: .normal)
         }
         else{
             chooser_supplied_or_built.selectedSegmentIndex = 1
             lbGeneratedUrl.textColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+            btnTest.setTitle("Test Built URL", for: .normal)
         }
         
         // Deluxe or Basic
@@ -162,6 +164,10 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
         tbPassword.text = defaults.string(forKey: sDataPassword)!
         
         lbGeneratedUrl.text = defaults.string(forKey: sDataGenUrl)!
+        
+        // Enable/Disable based on loaded settings
+        chooser_supplied_url_or_custom_ValueChange((Any).self)
+        chooser_deluxe_unit_or_basic_unit_ValueChanged((Any).self)
         
         // Load up log
         let results = DBManager.shared.getPreviousLog(limit: 25)
@@ -224,23 +230,216 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
         
     }
     
+    @IBOutlet weak var lbServer: UILabel!
+    
+    @IBOutlet weak var btnGenerateUrl: UIButton!
+    @IBOutlet weak var lbDevSection: UILabel!
+    @IBOutlet weak var lbLine: UILabel!
+    @IBOutlet weak var lbTime: UILabel!
+    @IBOutlet weak var lbPhone: UILabel!
+    @IBOutlet weak var lbName: UILabel!
+    @IBOutlet weak var lbIO: UILabel!
+    @IBOutlet weak var lbSE: UILabel!
+    @IBOutlet weak var lbStatus: UILabel!
+    @IBOutlet weak var lbDuration: UILabel!
+    @IBOutlet weak var lbRings: UILabel!
+    @IBOutlet weak var lbRingType: UILabel!
+    
+    @IBOutlet weak var lbLineD: UILabel!
+    @IBOutlet weak var lbTimeD: UILabel!
+    @IBOutlet weak var lbNumberD: UILabel!
+    @IBOutlet weak var lbNameD: UILabel!
+    @IBOutlet weak var lbIOD: UILabel!
+    @IBOutlet weak var lbSED: UILabel!
+    @IBOutlet weak var lbStatusD: UILabel!
+    @IBOutlet weak var lbDurationD: UILabel!
+    @IBOutlet weak var lbRingsD: UILabel!
+    @IBOutlet weak var lbRingTypeD: UILabel!
+    
+    @IBOutlet weak var lbCIDVarsHeader: UILabel!
+    @IBOutlet weak var lbYourVarHeader: UILabel!
+    @IBOutlet weak var lbDesHeader: UILabel!
+    
     @IBAction func chooser_supplied_url_or_custom_ValueChange(_ sender: Any) {
         
         let isSupplied = chooser_supplied_or_built.selectedSegmentIndex == 0
         
         if(isSupplied){
+            
             btnTest.setTitle("Test Supplied URL", for: .normal)
-            lbGeneratedUrl.textColor = #colorLiteral(red: 0.3176470697, green: 0.07450980693, blue: 0.02745098062, alpha: 1)
+            lbGeneratedUrl.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            
+            lbDesHeader.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbCIDVarsHeader.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbYourVarHeader.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            
+            tbLine.isEnabled = false
+            tbDateTime.isEnabled = false
+            tbNumber.isEnabled = false
+            tbName.isEnabled = false
+            tbIO.isEnabled = false
+            tbSE.isEnabled = false
+            tbStatus.isEnabled = false
+            tbDuration.isEnabled = false
+            tbRings.isEnabled = false
+            tbRingType.isEnabled = false
+            tbServer.isEnabled = false
+            
+            tbLine.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbDateTime.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbNumber.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbName.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbIO.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbSE.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbStatus.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbDuration.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbRings.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbRingType.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbServer.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbDevSection.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            
+            lbLine.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbTime.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbPhone.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbName.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbIO.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbSE.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbStatus.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbDuration.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbRings.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbRingType.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            
+            lbLineD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbTimeD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbNumberD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbNameD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbIOD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbSED.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbStatusD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbDurationD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbRingsD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbRingTypeD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            
+            lbServer.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            
+            btnGenerateUrl.isEnabled = false
         }
-        else{
+        else
+        {
+            
             btnTest.setTitle("Test Built URL", for: .normal)
             lbGeneratedUrl.textColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+            
+            lbDesHeader.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbCIDVarsHeader.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbYourVarHeader.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            
+            tbLine.isEnabled = true
+            tbDateTime.isEnabled = true
+            tbNumber.isEnabled = true
+            tbName.isEnabled = true
+            tbServer.isEnabled = true
+            
+            let isDeluxed = chooser_deluxe_or_basic.selectedSegmentIndex == 1
+            
+            if(isDeluxed){
+                
+                tbIO.isEnabled = true
+                tbSE.isEnabled = true
+                tbStatus.isEnabled = true
+                tbDuration.isEnabled = true
+                tbRings.isEnabled = true
+                tbRingType.isEnabled = true
+                
+                tbIO.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                tbSE.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                tbStatus.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                tbDuration.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                tbRings.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                tbRingType.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                
+                lbIOD.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                lbSED.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                lbStatusD.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                lbDurationD.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                lbRingsD.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                lbRingTypeD.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                
+                lbIO.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                lbSE.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                lbStatus.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                lbDuration.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                lbRings.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                lbRingType.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                
+            }
+            else{
+                
+                tbIO.isEnabled = false
+                tbSE.isEnabled = false
+                tbStatus.isEnabled = false
+                tbDuration.isEnabled = false
+                tbRings.isEnabled = false
+                tbRingType.isEnabled = false
+                
+                tbIO.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                tbSE.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                tbStatus.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                tbDuration.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                tbRings.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                tbRingType.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                
+                lbIOD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                lbSED.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                lbStatusD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                lbDurationD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                lbRingsD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                lbRingTypeD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                
+                lbIO.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                lbSE.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                lbStatus.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                lbDuration.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                lbRings.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                lbRingType.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+                
+            }
+            
+            tbLine.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            tbDateTime.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            tbNumber.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            tbName.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+
+            tbServer.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbDevSection.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            
+            lbLine.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbTime.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbPhone.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbName.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            
+            lbLineD.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbTimeD.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbNumberD.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbNameD.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            
+            lbServer.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            
+            btnGenerateUrl.isEnabled = true
+            
+            
         }
         
     }
     
     @IBAction func chooser_deluxe_unit_or_basic_unit_ValueChanged(_ sender: Any) {
     
+        let isSupplied = chooser_supplied_or_built.selectedSegmentIndex == 0
+        
+        if(isSupplied){
+            return
+        }
+        
         let isDeluxed = chooser_deluxe_or_basic.selectedSegmentIndex == 1
         
         if(isDeluxed){
@@ -259,6 +458,20 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             tbRings.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
             tbRingType.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
             
+            lbIOD.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbSED.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbStatusD.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbDurationD.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbRingsD.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbRingTypeD.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            
+            lbIO.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbSE.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbStatus.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbDuration.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbRings.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            lbRingType.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            
         }
         else{
             
@@ -275,6 +488,20 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             tbDuration.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
             tbRings.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
             tbRingType.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            
+            lbIOD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbSED.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbStatusD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbDurationD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbRingsD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbRingTypeD.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            
+            lbIO.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbSE.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbStatus.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbDuration.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbRings.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            lbRingType.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
             
         }
         
@@ -348,41 +575,41 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
         
         var genUrl = tbServer.text! + "?"
         
-        if(tbLine.text != ""){
-            genUrl = genUrl + tbLine.text! + "=%Line&"
+        if(tbLine.text?.replacingOccurrences(of: " ", with: "") != ""){
+            genUrl = genUrl + tbLine.text!.replacingOccurrences(of: " ", with: "") + "=%Line&"
         }
         
-        if(tbDateTime.text != ""){
-            genUrl = genUrl + tbDateTime.text! + "=%Time&"
+        if(tbDateTime.text?.replacingOccurrences(of: " ", with: "") != ""){
+            genUrl = genUrl + tbDateTime.text!.replacingOccurrences(of: " ", with: "") + "=%Time&"
         }
         
-        if(tbNumber.text != ""){
-            genUrl = genUrl + tbNumber.text! + "=%Phone&"
+        if(tbNumber.text?.replacingOccurrences(of: " ", with: "") != ""){
+            genUrl = genUrl + tbNumber.text!.replacingOccurrences(of: " ", with: "") + "=%Phone&"
         }
         
-        if(tbName.text != ""){
-            genUrl = genUrl + tbName.text! + "=%Name&"
+        if(tbName.text?.replacingOccurrences(of: " ", with: "") != ""){
+            genUrl = genUrl + tbName.text!.replacingOccurrences(of: " ", with: "") + "=%Name&"
         }
-        if(tbIO.text != ""){
-            genUrl = genUrl + tbIO.text! + "=%IO&"
+        if(tbIO.text?.replacingOccurrences(of: " ", with: "") != ""){
+            genUrl = genUrl + tbIO.text!.replacingOccurrences(of: " ", with: "") + "=%IO&"
         }
-        if(tbSE.text != ""){
-            genUrl = genUrl + tbSE.text! + "=%SE&"
+        if(tbSE.text?.replacingOccurrences(of: " ", with: "") != ""){
+            genUrl = genUrl + tbSE.text!.replacingOccurrences(of: " ", with: "") + "=%SE&"
         }
-        if(tbStatus.text != ""){
-            genUrl = genUrl + tbStatus.text! + "=%Status&"
+        if(tbStatus.text?.replacingOccurrences(of: " ", with: "") != ""){
+            genUrl = genUrl + tbStatus.text!.replacingOccurrences(of: " ", with: "") + "=%Status&"
         }
-        if(tbDuration.text != ""){
-            genUrl = genUrl + tbDuration.text! + "=%Duration&"
+        if(tbDuration.text?.replacingOccurrences(of: " ", with: "") != ""){
+            genUrl = genUrl + tbDuration.text!.replacingOccurrences(of: " ", with: "") + "=%Duration&"
         }
-        if(tbRings.text != ""){
-            genUrl = genUrl + tbRings.text! + "=%RingNumber&"
+        if(tbRings.text?.replacingOccurrences(of: " ", with: "") != ""){
+            genUrl = genUrl + tbRings.text!.replacingOccurrences(of: " ", with: "") + "=%RingNumber&"
         }
-        if(tbRingType.text != ""){
-            genUrl = genUrl + tbRingType.text! + "=%RingType&"
+        if(tbRingType.text?.replacingOccurrences(of: " ", with: "") != ""){
+            genUrl = genUrl + tbRingType.text!.replacingOccurrences(of: " ", with: "") + "=%RingType&"
         }
         
-        if(genUrl == "?"){
+        if(genUrl.replacingOccurrences(of: " ", with: "") == "?"){
             
             lbGeneratedUrl.text = "[failed to generate URL, please make sure you have at least one parameter set]"
             return
@@ -424,6 +651,7 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             showPopup(title: "Setup Complete", message: "Pasted Successfully, you can test pasted URL with a call or the 'Test Supplied URL' button.")
             
             tbSuppliedUrl.text = clipboardText!
+            lbGeneratedUrl.text = clipboardText!
             return
             
         }
@@ -447,16 +675,16 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     func parseParams(params:String) -> Bool{
         
         // Setup varibles
-        var line_variableName = "not used"
-        var time_variableName = "not used"
-        var phone_variableName = "not used"
-        var name_variableName = "not used"
-        var io_variableName = "not used"
-        var se_variableName = "not used"
-        var status_variableName = "not used"
-        var duration_variableName = "not used"
-        var ringNumber_variableName = "not used"
-        var ringType_variableName = "not used"
+        var line_variableName = ""
+        var time_variableName = ""
+        var phone_variableName = ""
+        var name_variableName = ""
+        var io_variableName = ""
+        var se_variableName = ""
+        var status_variableName = ""
+        var duration_variableName = ""
+        var ringNumber_variableName = ""
+        var ringType_variableName = ""
         
         // Capture variables from params string
         let lineMatch = params.capturedGroups(withRegex: linePattern)
@@ -753,6 +981,9 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
                     else{
                         postToThisUrl = lbGeneratedUrl.text!
                     }
+                    
+                    // Add to SQL
+                    DBManager.shared.addToLog(dateTime: callTime, line: lineNumber, type: "", indicator: detailedType, dur: "", checksum: "", rings: "", num: "", name: "")
                     
                     // POST to Cloud
                     post_url(urlPost: postToThisUrl, line: lineNumber, time: callTime, phone: "", name: "", io: "", se: "", status: detailedType, duration: "", ringNumber: "", ringType: "")
