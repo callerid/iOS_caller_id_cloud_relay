@@ -61,7 +61,7 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     @IBOutlet weak var tbPassword: UITextField!
     
     
-    @IBOutlet weak var chooser_supplied_or_custom: UISegmentedControl!
+    @IBOutlet weak var chooser_supplied_or_built: UISegmentedControl!
     @IBOutlet weak var chooser_deluxe_or_basic: UISegmentedControl!
     @IBOutlet weak var chooser_auth_or_no_auth: UISegmentedControl!
     
@@ -94,13 +94,13 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
         // Supplied URL
         tbSuppliedUrl.text = defaults.string(forKey: sDataSuppliedUrl)!
         
-        // Supplied vs Custom
+        // Supplied vs Built
         let usingSupplied = defaults.bool(forKey: sDataUsingSuppliedUrl)
         if(usingSupplied){
-            chooser_supplied_or_custom.selectedSegmentIndex = 0
+            chooser_supplied_or_built.selectedSegmentIndex = 0
         }
         else{
-            chooser_supplied_or_custom.selectedSegmentIndex = 1
+            chooser_supplied_or_built.selectedSegmentIndex = 1
             lbGeneratedUrl.textColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         }
         
@@ -117,9 +117,23 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             tbRings.isEnabled = true
             tbRingType.isEnabled = true
             
+            tbIO.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            tbSE.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            tbStatus.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            tbDuration.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            tbRings.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            tbRingType.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            
         }
         else{
             chooser_deluxe_or_basic.selectedSegmentIndex = 0
+            
+            tbIO.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbSE.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbStatus.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbDuration.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbRings.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbRingType.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
         }
         
         tbServer.text = defaults.string(forKey: sDataServer)!
@@ -164,7 +178,7 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
         // Save all settings
         let defaults = UserDefaults.standard
         defaults.set(tbSuppliedUrl.text, forKey: sDataSuppliedUrl)
-        defaults.set(chooser_supplied_or_custom.selectedSegmentIndex==0, forKey: sDataUsingSuppliedUrl)
+        defaults.set(chooser_supplied_or_built.selectedSegmentIndex==0, forKey: sDataUsingSuppliedUrl)
         defaults.set(chooser_deluxe_or_basic.selectedSegmentIndex==1, forKey: sDataUsingDeluxeUnit)
         defaults.set(tbServer.text, forKey: sDataServer)
         
@@ -189,12 +203,6 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     
     func addToLog(text:String){
         
-        // Filter out small echos from unit
-        let temp = text.replacingOccurrences(of: " ", with: "")
-        if(temp.characters.count<10){
-            return
-        }
-        
         if(log_datasource_delegate.addToLog(data: text)){
             
             let log_data_count = log_datasource_delegate.getLogDataCount()
@@ -215,14 +223,14 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     
     @IBAction func chooser_supplied_url_or_custom_ValueChange(_ sender: Any) {
         
-        let isSupplied = chooser_supplied_or_custom.selectedSegmentIndex == 0
+        let isSupplied = chooser_supplied_or_built.selectedSegmentIndex == 0
         
         if(isSupplied){
             btnTest.setTitle("Test Supplied URL", for: .normal)
             lbGeneratedUrl.textColor = #colorLiteral(red: 0.3176470697, green: 0.07450980693, blue: 0.02745098062, alpha: 1)
         }
         else{
-            btnTest.setTitle("Test Custom URL", for: .normal)
+            btnTest.setTitle("Test Built URL", for: .normal)
             lbGeneratedUrl.textColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         }
         
@@ -241,6 +249,13 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             tbRings.isEnabled = true
             tbRingType.isEnabled = true
             
+            tbIO.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            tbSE.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            tbStatus.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            tbDuration.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            tbRings.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            tbRingType.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            
         }
         else{
             
@@ -250,6 +265,13 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             tbDuration.isEnabled = false
             tbRings.isEnabled = false
             tbRingType.isEnabled = false
+            
+            tbIO.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbSE.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbStatus.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbDuration.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbRings.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+            tbRingType.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
             
         }
         
@@ -281,7 +303,16 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     }
     @IBAction func btnTest_Click(_ sender: Any) {
         
-        let usingSupplied:Bool = chooser_supplied_or_custom.selectedSegmentIndex == 0
+        let usingAuth:Bool = chooser_auth_or_no_auth.selectedSegmentIndex == 0
+        
+        if(usingAuth){
+            if(tbUserName.text == ""){
+                showPopup(title: "Authenication not setup properly.", message: "Using authentication requires at least a username. Example call NOT sent.")
+                return
+            }
+        }
+        
+        let usingSupplied:Bool = chooser_supplied_or_built.selectedSegmentIndex == 0
         
         if(usingSupplied){
             
@@ -294,7 +325,7 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             
             post_url(urlPost: lbGeneratedUrl.text!, line: "01", time: "01/01 12:00 PM", phone: "770-263-7111", name: "CallerID.com", io: "I", se: "S", status: "x", duration: "0030", ringNumber: "03", ringType: "A")
             
-            showPopup(title: "Example Call Sent", message: "Call was sent to custom URL.")
+            showPopup(title: "Example Call Sent", message: "Call was sent to built URL.")
             
         }
         
@@ -305,6 +336,7 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     
     @IBAction func btnGenerate_Click(_ sender: Any) {
         generate_web_url()
+        showPopup(title: "Setup Complete", message: "Double check built URL for accuracy. Click 'Test Built URL' to send example call to server.")
     }
     
     // Generating web address
@@ -347,6 +379,12 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             genUrl = genUrl + tbRingType.text! + "=%RingType&"
         }
         
+        if(genUrl == "?"){
+            
+            lbGeneratedUrl.text = "[failed to generate URL, please make sure you have at least one parameter set]"
+            return
+        }
+        
         // Return generated string
         lbGeneratedUrl.text = genUrl.substring(to: genUrl.index(before: genUrl.endIndex))
         
@@ -380,7 +418,8 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
         
         if(parseParams(params: params!)){
             
-            showPopup(title: "Success", message: "Pasted Successful")
+            showPopup(title: "Setup Complete", message: "Pasted Successfully, you can test pasted URL with a call or the 'Test Supplied URL' button.")
+            
             tbSuppliedUrl.text = clipboardText!
             return
             
@@ -653,7 +692,7 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
                 
                 // Get URL to post to
                 var postToThisUrl = ""
-                if(chooser_supplied_or_custom.selectedSegmentIndex==0){
+                if(chooser_supplied_or_built.selectedSegmentIndex==0){
                     postToThisUrl = tbSuppliedUrl.text!
                 }
                 else{
@@ -664,10 +703,32 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
                 let ringN = callRing.getCharAtIndexAsString(i: 1)
                 
                 // POST to Cloud
-                post_url(urlPost: postToThisUrl, line: lineNumber, time: callTime, phone: phoneNumber, name: callerId, io: inboundOrOutbound, se: startOrEnd, status: detailedType, duration: duration, ringNumber: ringN, ringType: ringT)
+                if(chooser_deluxe_or_basic.selectedSegmentIndex==0){
+                    
+                    // If Basic Unit, only send Start records to the cloud
+                    if(startOrEnd == "S"){
+                        
+                        post_url(urlPost: postToThisUrl, line: lineNumber, time: callTime, phone: phoneNumber, name: callerId, io: inboundOrOutbound, se: startOrEnd, status: detailedType, duration: duration, ringNumber: ringN, ringType: ringT)
+                        
+                    }
+                    
+                }
+                else{
+                    
+                    // If Deluxe Unit - send all (detailed will be handled independently
+                    post_url(urlPost: postToThisUrl, line: lineNumber, time: callTime, phone: phoneNumber, name: callerId, io: inboundOrOutbound, se: startOrEnd, status: detailedType, duration: duration, ringNumber: ringN, ringType: ringT)
+                    
+                }
+                
                 
                 let textToLog = (udpRecieved as String).getCompleteMatch(regex: callRecordPattern)
-                addToLog(text: textToLog)
+                
+                
+                if(lineNumber != "n/a"){
+                    
+                    addToLog(text: textToLog as String)
+                    
+                }
                 
             }
             
@@ -675,23 +736,33 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             
             if(detailMatches.count>0){
                 
-                lineNumber = detailMatches[0]
-                detailedType = detailMatches[1]
-                callTime = detailMatches[2]
-                
-                // Get URL to post to
-                var postToThisUrl = ""
-                if(chooser_supplied_or_custom.selectedSegmentIndex==0){
-                    postToThisUrl = tbSuppliedUrl.text!
+                // If detailed then check to see if box is a Deluxe unit and also that the detailed
+                // user parameter variable is setup
+                if(tbStatus.text != "" || chooser_deluxe_or_basic.selectedSegmentIndex==0){
+                    
+                    lineNumber = detailMatches[0]
+                    detailedType = detailMatches[1]
+                    callTime = detailMatches[2]
+                    
+                    // Get URL to post to
+                    var postToThisUrl = ""
+                    if(chooser_supplied_or_built.selectedSegmentIndex==0){
+                        postToThisUrl = tbSuppliedUrl.text!
+                    }
+                    else{
+                        postToThisUrl = lbGeneratedUrl.text!
+                    }
+                    
+                    // POST to Cloud
+                    post_url(urlPost: postToThisUrl, line: lineNumber, time: callTime, phone: "", name: "", io: "", se: "", status: detailedType, duration: "", ringNumber: "", ringType: "")
+                    
                 }
-                else{
-                    postToThisUrl = lbGeneratedUrl.text!
+                
+                if(lineNumber != "n/a"){
+                 
+                    addToLog(text: udpRecieved as String)
+                    
                 }
-                
-                // POST to Cloud
-                post_url(urlPost: postToThisUrl, line: lineNumber, time: callTime, phone: "", name: "", io: "", se: "", status: detailedType, duration: "", ringNumber: "", ringType: "")
-                
-                addToLog(text: udpRecieved as String)
                 
             }
         }
