@@ -73,6 +73,8 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
         
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(goesToBackground), name: .UIApplicationWillResignActive, object: nil)
+        
         // Create database if not already created
         _ = DBManager.shared.createDatabase()
         
@@ -181,6 +183,16 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(false)
         
+        save_settings()
+        
+    }
+    
+    func goesToBackground(_ notification: Notification) {
+        save_settings()
+    }
+    
+    func save_settings(){
+        
         // Save all settings
         let defaults = UserDefaults.standard
         defaults.set(tbSuppliedUrl.text, forKey: sDataSuppliedUrl)
@@ -221,6 +233,14 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             tbv_log.scrollToRow(at: indexPath as IndexPath, at: UITableViewScrollPosition.middle, animated: true)
             
         }
+        
+    }
+    
+    @IBAction func btnClearLog_Click(_ sender: Any) {
+        
+        log_datasource_delegate.clear()
+        _ = DBManager.shared.executeQuery(query: "DELETE FROM calls;")
+        tbv_log.reloadData()
         
     }
     
