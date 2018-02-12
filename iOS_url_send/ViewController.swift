@@ -40,6 +40,9 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     let sDataPassword = "password"
     
     let sDataGenUrl = "generated_url"
+    var totalPackets:Int = 0
+    var previousReceived: [String] = []
+    
     
     // UI References
     @IBOutlet weak var tbSuppliedUrl: UITextField!
@@ -72,6 +75,8 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        totalPackets = 0
         
         NotificationCenter.default.addObserver(self, selector: #selector(goesToBackground), name: .UIApplicationWillResignActive, object: nil)
         
@@ -910,6 +915,23 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
         
         if let udpRecieved = NSString(data: data, encoding: String.Encoding.ascii.rawValue) {
             
+            // ----------------------------------------------------------------
+            // Keep track of previous 30 to have ablitiy of ignoring duplicate
+            // packets - even if they are out of order, which can happen
+            //-----------------------------------------------------------------
+            if previousReceived.contains(udpRecieved as String){
+                return;
+            }
+            
+            if(previousReceived.count>30){
+                previousReceived.append(udpRecieved as String)
+                previousReceived.removeFirst()
+            }
+            else{
+                previousReceived.append(udpRecieved as String)
+            }
+            //-----------------------------------------------------------------
+            
             // parse and handle udp data----------------------------------------------
             
             // declare used variables for matching
@@ -1016,6 +1038,14 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
                     addToLog(text: textToLog as String)
                     
                 }
+                
+            }
+            
+            if(callMatches.count<1 && detailMatches.count<1){
+                
+                totalPackets += 1
+                tbLine.text = "Total Packets: " + String(totalPackets)
+                
                 
             }
         }
