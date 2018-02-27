@@ -41,6 +41,7 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     
     let sDataGenUrl = "generated_url"
     var totalPackets:Int = 0
+    let debugMode:Bool = false
     var previousReceived: [String] = []
     
     
@@ -907,7 +908,28 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     }
     
     // --------------------------------------------------------------------------------------
-    
+    func removeReceptionFromBuffer(reception:String){
+        
+        var indexes:[Int] = []
+        var cnt = 0
+        
+        for rec in previousReceived {
+            
+            if(rec.contains(reception.substring(from:reception.index(reception.endIndex, offsetBy: -20)))){
+                indexes.append(cnt)
+            }
+            
+            cnt = cnt + 1
+            
+        }
+        
+        for i in (0...indexes.count - 1).reversed() {
+            
+            previousReceived.remove(at: indexes[i])
+            
+        }
+        
+    }
     // -------------------------------------------------------------------------
     //                     Receive data from a UDP broadcast
     // -------------------------------------------------------------------------
@@ -959,6 +981,10 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
                 callTime = callMatches[7]
                 phoneNumber = callMatches[8]
                 callerId = callMatches[9]
+                
+                if(startOrEnd == "E"){
+                    removeReceptionFromBuffer(reception: udpRecieved as String)
+                }
                 
                 // Add to SQL
                 insertIntoSql(line: lineNumber, time: callTime, phone: phoneNumber, name: callerId, io: inboundOrOutbound, se: startOrEnd, status: detailedType, duration: duration, ringNumber: callRing.getCharAtIndexAsString(i: 0), ringType: callRing.getCharAtIndexAsString(i: 1), checksum: ckSum)
@@ -1041,13 +1067,17 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
                 
             }
             
-            if(callMatches.count<1 && detailMatches.count<1){
+            if(debugMode){
                 
-                totalPackets += 1
-                tbLine.text = "Total Packets: " + String(totalPackets)
-                
-                
+                if(callMatches.count<1 && detailMatches.count<1){
+                    
+                    totalPackets += 1
+                    tbLine.text = "Total Packets: " + String(totalPackets)
+                    
+                    
+                }
             }
+            
         }
         
     }
