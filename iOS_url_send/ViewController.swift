@@ -42,7 +42,7 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
     let sDataGenUrl = "generated_url"
     var totalPackets:Int = 0
     let debugMode:Bool = false
-    var previousReceived: [String] = []
+    var previousReceived = [String: Int]()
     
     
     // UI References
@@ -182,6 +182,39 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
         
         for entry in results.reversed() {
             addToLog(text: entry)
+        }
+        
+        // Duplicate handling ticker
+        _ = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(dups_timer_tick), userInfo: nil, repeats: true)
+        
+    }
+    
+    func dups_timer_tick(){
+        
+        if(previousReceived.isEmpty){
+            return
+        }
+        
+        // Create key list
+        var keys_to_remove = [String]()
+        var keys_to_inccrement = [String]()
+        
+        for (key, _) in previousReceived{
+            
+            if(previousReceived[key]! > 4){
+                keys_to_remove.append(key)
+            }
+            else{
+                keys_to_inccrement.append(key)
+            }
+        }
+        
+        for key in keys_to_inccrement{
+            previousReceived[key] = previousReceived[key]! + 1
+        }
+        
+        for key in keys_to_remove{
+            previousReceived.removeValue(forKey: key)
         }
         
     }
@@ -907,29 +940,7 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
         
     }
     
-    // --------------------------------------------------------------------------------------
-    func removeReceptionFromBuffer(reception:String){
-        
-        var indexes:[Int] = []
-        var cnt = 0
-        
-        for rec in previousReceived {
-            
-            if(rec.contains(reception.substring(from:reception.index(reception.endIndex, offsetBy: -20)))){
-                indexes.append(cnt)
-            }
-            
-            cnt = cnt + 1
-            
-        }
-        
-        for i in (0...indexes.count - 1).reversed() {
-            
-            previousReceived.remove(at: indexes[i])
-            
-        }
-        
-    }
+    // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     //                     Receive data from a UDP broadcast
     // -------------------------------------------------------------------------
@@ -941,16 +952,25 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             // Keep track of previous 30 to have ablitiy of ignoring duplicate
             // packets - even if they are out of order, which can happen
             //-----------------------------------------------------------------
-            if previousReceived.contains(udpRecieved as String){
-                return;
+            let found = previousReceived[udpRecieved as String] != nil
+            if(found){
+                return
             }
             
             if(previousReceived.count>30){
-                previousReceived.append(udpRecieved as String)
-                previousReceived.removeFirst()
+                previousReceived[udpRecieved as String] = 0
+                
+                var removal_key = ""
+                for key in previousReceived.keys{
+                    removal_key = key
+                    break
+                }
+                
+                previousReceived.removeValue(forKey: removal_key)
+                
             }
             else{
-                previousReceived.append(udpRecieved as String)
+                previousReceived[udpRecieved as String] = 0
             }
             //-----------------------------------------------------------------
             
@@ -981,10 +1001,6 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
                 callTime = callMatches[7]
                 phoneNumber = callMatches[8]
                 callerId = callMatches[9]
-                
-                if(startOrEnd == "E"){
-                    removeReceptionFromBuffer(reception: udpRecieved as String)
-                }
                 
                 // Add to SQL
                 insertIntoSql(line: lineNumber, time: callTime, phone: phoneNumber, name: callerId, io: inboundOrOutbound, se: startOrEnd, status: detailedType, duration: duration, ringNumber: callRing.getCharAtIndexAsString(i: 0), ringType: callRing.getCharAtIndexAsString(i: 1), checksum: ckSum)
