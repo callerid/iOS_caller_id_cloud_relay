@@ -328,6 +328,9 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             btnTest.setTitle("Test Supplied URL", for: .normal)
             lbGeneratedUrl.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
             
+            chooser_deluxe_or_basic.isEnabled = false
+            
+            
             lbDesHeader.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
             lbCIDVarsHeader.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
             lbYourVarHeader.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
@@ -388,6 +391,8 @@ class ViewController: UIViewController, GCDAsyncUdpSocketDelegate {
             
             btnTest.setTitle("Test Built URL", for: .normal)
             lbGeneratedUrl.textColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+            
+            chooser_deluxe_or_basic.isEnabled = true
             
             lbDesHeader.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
             lbCIDVarsHeader.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
